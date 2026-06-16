@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>개인정보처리방침 — QADOC</title>
+  <meta name="description" content="QADOC 개인정보처리방침 — 수집 항목, 이용 목적, 보관·파기, 제3자 처리(LLM·Supabase)에 관한 안내." />
+  <link rel="stylesheet" href="src/css/styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <a class="brand-mark" href="index.html" style="text-decoration:none">QADOC</a>
+      <span class="brand-sub">개인정보처리방침</span>
+    </div>
+    <a class="page-back" href="index.html">← 앱으로</a>
+  </header>
+
+  <main class="page-wrap">
+    <h1>개인정보처리방침</h1>
+    <p class="page-meta">시행일: 2026-06-16 · 본 방침은 파일럿 단계 기준이며 정식 출시 시 갱신될 수 있습니다.</p>
+
+    <h2>1. 수집하는 정보</h2>
+    <ul>
+      <li><strong>작성 문서 데이터</strong> — 사용자가 작성한 TC·기획서 내용. 기본적으로 <strong>사용자 브라우저(localStorage)에만</strong> 저장되며, 별도 서버로 전송되지 않습니다.</li>
+      <li><strong>인증 정보(선택)</strong> — Supabase 연동을 활성화한 경우에 한해, 로그인에 사용하는 이메일 주소. (파일럿 기본 구성에서는 수집하지 않습니다.)</li>
+      <li><strong>LLM 검토 요청 데이터(선택)</strong> — "LLM 검토"를 사용할 때만, 검토 대상 문서 내용이 검토를 위해 서버(LLM 제공자)로 전송됩니다.</li>
+    </ul>
+    <p>QADOC은 현재 광고·추적 쿠키나 분석용 트래커를 사용하지 않습니다.</p>
+
+    <h2>2. 이용 목적</h2>
+    <p>수집된 정보는 문서 작성·검토·저장·내보내기·공유 기능 제공의 목적으로만 이용됩니다.</p>
+
+    <h2>3. 제3자 처리</h2>
+    <ul>
+      <li><strong>LLM 제공자</strong> — LLM 검토 사용 시 문서 내용이 LLM 제공자(예: Cloudflare Workers AI)로 전송·처리됩니다. API 키는 서버에만 보관되며 사용자에게 노출되지 않습니다.</li>
+      <li><strong>Supabase(선택)</strong> — 인증·저장을 Supabase로 전환한 경우 데이터가 Supabase에 저장되며, 행 수준 보안(RLS)으로 본인 데이터만 접근하도록 제한됩니다.</li>
+      <li><strong>호스팅(Cloudflare)</strong> — 사이트는 Cloudflare를 통해 HTTPS로 제공됩니다.</li>
+    </ul>
+
+    <h2>4. 보관 및 파기</h2>
+    <p>
+      localStorage 데이터는 사용자 브라우저에 보관되며, 브라우저 저장소를 비우면 삭제됩니다.
+      Supabase 사용 시 사용자는 자신의 문서를 직접 삭제할 수 있습니다.
+    </p>
+
+    <h2>5. 이용자의 권리</h2>
+    <p>이용자는 자신의 데이터 열람·수정·삭제를 요청할 수 있으며, 브라우저 저장소 삭제 또는 문서 삭제로 직접 수행할 수 있습니다.</p>
+
+    <h2>6. 문의</h2>
+    <p>개인정보 관련 문의는 <a href="contact.html">문의 페이지</a>를 통해 접수합니다.</p>
+
+    <p class="page-foot">
+      <a href="index.html">앱으로</a> · <a href="about.html">소개</a> · <a href="terms.html">이용약관</a> · <a href="contact.html">문의</a>
+    </p>
+  </main>
+</body>
+</html>
