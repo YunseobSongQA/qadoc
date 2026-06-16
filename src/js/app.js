@@ -153,6 +153,18 @@
         return restoreVersion(Number(el.getAttribute("data-ver")));
       case "modal-close":
         return closeModal();
+      case "rules-open":
+        return openRulesEditor();
+      case "rules-pick":
+        return renderRulesEditor(el.getAttribute("data-type"), Number(el.getAttribute("data-ver")));
+      case "rules-validate":
+        return validateRulesForm();
+      case "rules-save":
+        return saveRulesForm();
+      case "rules-activate":
+        return activateRulesVersion(el.getAttribute("data-type"), Number(el.getAttribute("data-ver")));
+      case "rules-reset":
+        return resetRulesForm(el.getAttribute("data-type"));
       case "signin":
         return signIn();
       case "signout":
@@ -332,9 +344,14 @@
 
   // ---------- 검토 ----------
   // 룰베이스 검토 (항상 동작, 비용 0)
+  function activeRuleset(type) {
+    // 화면 편집/버전 관리되는 룰셋 우선, 없으면 시스템 기본
+    return QADOC.rules ? QADOC.rules.active(type) : QADOC.review.activeRulesetFor(type);
+  }
+
   function ruleFindings() {
     const cur = state.current;
-    const ruleset = QADOC.review.activeRulesetFor(cur.type);
+    const ruleset = activeRuleset(cur.type);
     const findings = QADOC.review.run(cur.content, ruleset).findings.map((f) =>
       Object.assign({ source: "rule" }, f)
     );
@@ -629,6 +646,145 @@
       '<div class="ro-doc"><h2>' + esc(payload.ti || "(제목 없음)") + "</h2>" + rows + "</div>";
     $("#doc-list").innerHTML = '<li class="muted small">공유 보기 모드</li>';
     $("#review-output").innerHTML = '<p class="muted small">읽기 전용 공유 보기입니다.</p>';
+  }
+
+  // ---------- 검토 기준(룰셋) 편집 ----------
+  let rulesEditorType = "testcase";
+  let rulesEditorVersion = null; // 현재 편집창에 띄운 버전
+
+  const RULE_TYPES = [
+    ["required", "필수 입력 (값 비면 위반)"],
+    ["minItems", "리스트 최소 개수 (min)"],
+    ["minLength", "최소 글자수 (min)"],
+    ["maxLength", "최대 글자수 (max)"],
+    ["regex", "형식 일치 (pattern, 불일치 시 위반)"],
+    ["pattern", "금지 패턴 발견 시 위반 (pattern, field \"*\"=전체)"],
+    ["forbiddenWords", "금지/모호어 포함 시 위반 (words: [])"]
+  ];
+
+  function openRulesEditor() {
+    rulesEditorType = state.current ? state.current.type : "testcase";
+    renderRulesEditor(rulesEditorType, null);
+  }
+
+  function renderRulesEditor(type, version) {
+    rulesEditorType = type;
+    const versions = QADOC.rules.versions(type);
+    const active = QADOC.rules.active(type);
+    const showVer = version || active.version;
+    rulesEditorVersion = showVer;
+    const shown = versions.find((v) => v.version === showVer) || active;
+
+    const typeName = type === "testcase" ? "테스트케이스" : "기획서";
+    const typeBtns =
+      ["testcase", "spec"]
+        .map(
+          (t) =>
+            '<button class="btn btn-sm' + (t === type ? " btn-primary" : "") + '" data-action="rules-pick" data-type="' +
+            t + '" data-ver="' + QADOC.rules.active(t).version + '">' +
+            (t === "testcase" ? "TC" : "기획서") + "</button>"
+        )
+        .join(" ");
+
+    const verItems = versions
+      .map((v) => {
+        const tag = v.active ? '<span class="ver-cur">활성</span>' : "";
+        const here = v.version === showVer ? " sel" : "";
+        const act = v.active
+          ? ""
+          : '<button class="btn btn-sm" data-action="rules-activate" data-type="' + type + '" data-ver="' + v.version + '">활성화</button>';
+        return (
+          '<li class="ver-item' + here + '">' +
+          '<div><button class="btn-link" data-action="rules-pick" data-type="' + type + '" data-ver="' + v.version + '"><strong>v' + v.version + "</strong></button> " +
+          tag + ' <span class="muted small">' + esc(v.name || "") + "</span></div>" + act + "</li>"
+        );
+      })
+      .join("");
+
+    const typesHelp = RULE_TYPES.map((r) => "<code>" + r[0] + "</code> — " + esc(r[1])).join("<br>");
+
+    const body =
+      '<div class="rules-bar"><span class="muted small">유형:</span> ' + typeBtns +
+      '<span class="muted small" style="margin-left:10px">버전 전환·생성</span></div>' +
+      '<ul class="ver-list rules-vers">' + verItems + "</ul>" +
+      '<label class="field-label">기준 이름</label>' +
+      '<input id="rules-name" type="text" value="' + esc(shown.name || "") + '" style="width:100%;margin-bottom:8px" />' +
+      '<label class="field-label">룰 정의 (JSON 배열)</label>' +
+      '<textarea id="rules-json" rows="14" style="width:100%;font-family:monospace;font-size:12px">' +
+      esc(JSON.stringify(shown.rules || [], null, 2)) + "</textarea>" +
+      '<div id="rules-msg" class="rules-msg muted small"></div>' +
+      '<div class="rules-actions">' +
+      '<button class="btn btn-sm" data-action="rules-validate">검증</button>' +
+      '<button class="btn btn-sm btn-primary" data-action="rules-save">새 버전으로 저장 + 활성화</button>' +
+      '<button class="btn btn-sm" data-action="rules-reset" data-type="' + type + '">기본값 복원</button>' +
+      "</div>" +
+      '<details class="rules-help"><summary>지원하는 룰 타입</summary><div class="muted small">' +
+      typesHelp +
+      "<br><br>공통 필드: <code>id</code>, <code>field</code>(필드 key 또는 \"*\"), <code>severity</code>(error|warning|info), <code>message</code>, <code>guideline</code></div></details>";
+
+    openModal("검토 기준 편집 — " + typeName, body);
+  }
+
+  function readRulesForm() {
+    const nameEl = $("#rules-name");
+    const jsonEl = $("#rules-json");
+    const name = nameEl ? nameEl.value.trim() : "";
+    const parsed = JSON.parse(jsonEl.value); // throws on bad JSON
+    if (!Array.isArray(parsed)) throw new Error("룰은 JSON 배열이어야 합니다.");
+    const validTypes = Object.keys(QADOC.review.handlers);
+    parsed.forEach((r, i) => {
+      if (!r || typeof r !== "object") throw new Error(i + "번째 항목이 객체가 아닙니다.");
+      if (!r.id || typeof r.id !== "string") throw new Error(i + "번째 룰에 문자열 id가 필요합니다.");
+      if (!r.field || typeof r.field !== "string") throw new Error("룰 '" + r.id + "'에 field 가 필요합니다.");
+      if (validTypes.indexOf(r.type) < 0) throw new Error("룰 '" + r.id + "'의 type '" + r.type + "'은 지원되지 않습니다.");
+      if (r.severity && ["error", "warning", "info"].indexOf(r.severity) < 0)
+        throw new Error("룰 '" + r.id + "'의 severity 가 잘못되었습니다.");
+    });
+    return { name: name, rules: parsed };
+  }
+
+  function setRulesMsg(text, ok) {
+    const el = $("#rules-msg");
+    if (el) {
+      el.textContent = text;
+      el.className = "rules-msg small " + (ok ? "ok" : "err");
+    }
+  }
+
+  function validateRulesForm() {
+    try {
+      const f = readRulesForm();
+      setRulesMsg("✓ 유효합니다. 룰 " + f.rules.length + "개.", true);
+    } catch (e) {
+      setRulesMsg("✗ " + (e.message || e), false);
+    }
+  }
+
+  function saveRulesForm() {
+    let f;
+    try {
+      f = readRulesForm();
+    } catch (e) {
+      return setRulesMsg("✗ " + (e.message || e), false);
+    }
+    const saved = QADOC.rules.saveNewVersion(rulesEditorType, f.name, f.rules);
+    flash("기준 저장됨 — " + (rulesEditorType === "testcase" ? "TC" : "기획서") + " v" + saved.version + " 활성화");
+    renderRulesEditor(rulesEditorType, saved.version);
+  }
+
+  function activateRulesVersion(type, version) {
+    const a = QADOC.rules.setActive(type, version);
+    flash("v" + a.version + " 활성화됨");
+    renderRulesEditor(type, version);
+  }
+
+  function resetRulesForm(type) {
+    if (!confirm("시스템 기본 기준을 새 버전으로 복원하고 활성화할까요?")) return;
+    const a = QADOC.rules.resetToDefault(type);
+    if (a) {
+      flash("기본값으로 복원됨 (v" + a.version + ")");
+      renderRulesEditor(type, a.version);
+    }
   }
 
   // ---------- 모달 ----------
