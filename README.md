@@ -27,9 +27,16 @@ TC(테스트케이스)와 기획서를 **공통 기준으로 작성·검토**하
   - 추후: **Anthropic Claude Haiku**(`claude-haiku-4-5`) — 지금은 미구현, `callAnthropic` 스텁에 구현 레시피만 주석으로 남겨둠 (채우면 교체됨)
 - **항상 fallback** — LLM이 막히거나(쿼터·키 없음) 정적 서버라 함수가 없으면, 룰베이스 검토는 그대로 동작.
 
+### 검토 기준 편집 UI (화면에서 기준 관리)
+
+- 사이드바 **"⚙ 검토 기준 편집"** → 룰을 화면에서 추가/수정하고 **버전으로 관리·전환**합니다.
+- 시스템 기본 기준으로 시드, 편집분은 **버전별 저장**(현재 localStorage, 추후 Supabase `rulesets` 테이블).
+- 룰 JSON 편집 + **유효성 검증**(타입·필드·severity), **새 버전으로 저장+활성화**, 이전 버전 활성화, **기본값 복원**.
+- 검토 엔진이 항상 **활성 버전 룰셋**을 사용 → 편집 즉시 반영. (모듈: `src/js/rules-store.js`)
+
 ### 설계 핵심: 기준을 "데이터"로
 
-검토 기준(룰)과 프리셋은 **코드가 아니라 데이터**(`src/data/*.js`)다.
+검토 기준(룰)과 프리셋은 **코드가 아니라 데이터**(`src/data/*.js` 기본값 + `rules-store.js` 버전 저장)다.
 → 코드 배포 없이 기준을 수정/추가/업데이트할 수 있고, 룰셋은 `version`/`active`로 이력 관리된다.
 이는 "공통 기준을 지속적으로 다듬어 시스템화한다"는 목표와 직결된다.
 
@@ -82,6 +89,7 @@ src/
   js/
     storage.js          저장소 추상화 (localStorage → 추후 Supabase 교체 지점)
     review-engine.js    룰베이스 검토 엔진 (룰셋 해석기)
+    rules-store.js      검토 기준 편집·버전 관리 (화면에서 룰 수정, localStorage)
     review-llm.js        LLM 검토 클라이언트 (/api/review 호출, 실패 시 fallback)
     export-excel.js     SheetJS Excel 내보내기 (테스트케이스)
     export-ppt.js       PptxGenJS PPT 내보내기 (기획서)
