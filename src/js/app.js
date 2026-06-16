@@ -689,6 +689,8 @@
         )
         .join(" ");
 
+    // 버전 이름은 사용자 입력에서 온 값일 수 있으므로 innerHTML 에 넣지 않고
+    // 렌더 후 textContent 로 주입한다 (정적 분석상 DOM text→HTML 흐름 차단 + XSS 안전).
     const verItems = versions
       .map((v) => {
         const tag = v.active ? '<span class="ver-cur">활성</span>' : "";
@@ -699,22 +701,22 @@
         return (
           '<li class="ver-item' + here + '">' +
           '<div><button class="btn-link" data-action="rules-pick" data-type="' + type + '" data-ver="' + v.version + '"><strong>v' + v.version + "</strong></button> " +
-          tag + ' <span class="muted small">' + esc(v.name || "") + "</span></div>" + act + "</li>"
+          tag + ' <span class="muted small vn" data-vn="' + v.version + '"></span></div>' + act + "</li>"
         );
       })
       .join("");
 
-    const typesHelp = RULE_TYPES.map((r) => "<code>" + r[0] + "</code> — " + esc(r[1])).join("<br>");
+    // RULE_TYPES 는 코드 상수(정적)라 innerHTML 에 그대로 사용해도 안전
+    const typesHelp = RULE_TYPES.map((r) => "<code>" + esc(r[0]) + "</code> — " + esc(r[1])).join("<br>");
 
     const body =
       '<div class="rules-bar"><span class="muted small">유형:</span> ' + typeBtns +
       '<span class="muted small" style="margin-left:10px">버전 전환·생성</span></div>' +
       '<ul class="ver-list rules-vers">' + verItems + "</ul>" +
       '<label class="field-label">기준 이름</label>' +
-      '<input id="rules-name" type="text" value="' + esc(shown.name || "") + '" style="width:100%;margin-bottom:8px" />' +
+      '<input id="rules-name" type="text" style="width:100%;margin-bottom:8px" />' +
       '<label class="field-label">룰 정의 (JSON 배열)</label>' +
-      '<textarea id="rules-json" rows="14" style="width:100%;font-family:monospace;font-size:12px">' +
-      esc(JSON.stringify(shown.rules || [], null, 2)) + "</textarea>" +
+      '<textarea id="rules-json" rows="14" style="width:100%;font-family:monospace;font-size:12px"></textarea>' +
       '<div id="rules-msg" class="rules-msg muted small"></div>' +
       '<div class="rules-actions">' +
       '<button class="btn btn-sm" data-action="rules-validate">검증</button>' +
@@ -726,6 +728,16 @@
       "<br><br>공통 필드: <code>id</code>, <code>field</code>(필드 key 또는 \"*\"), <code>severity</code>(error|warning|info), <code>message</code>, <code>guideline</code></div></details>";
 
     openModal("검토 기준 편집 — " + typeName, body);
+
+    // 동적(=사용자 입력 유래 가능) 텍스트는 DOM 프로퍼티로 주입 (innerHTML 미경유)
+    const nameEl = $("#rules-name");
+    if (nameEl) nameEl.value = shown.name || "";
+    const jsonEl = $("#rules-json");
+    if (jsonEl) jsonEl.value = JSON.stringify(shown.rules || [], null, 2);
+    versions.forEach((v) => {
+      const span = document.querySelector('.vn[data-vn="' + v.version + '"]');
+      if (span) span.textContent = v.name || "";
+    });
   }
 
   function readRulesForm() {
