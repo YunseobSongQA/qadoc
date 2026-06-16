@@ -79,6 +79,12 @@
       write(DOC_KEY, read(DOC_KEY).filter((d) => d.id !== id));
     },
 
+    // 과거 버전 스냅샷 (최신순). 현재 버전은 documents.content 에 별도로 있음.
+    getVersions(id) {
+      const d = this.getDocument(id);
+      return d && d.versions ? d.versions.slice().reverse() : [];
+    },
+
     listUserPresets() {
       return read(PRESET_KEY);
     },
