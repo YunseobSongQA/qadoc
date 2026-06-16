@@ -48,7 +48,7 @@ TC(테스트케이스)와 기획서를 **공통 기준으로 작성·검토**하
 # 방법 1) 정적 서버 — 작성/룰 검토/내보내기(Excel·PPT)/저장/공유/이력 전부 동작 (LLM 검토는 fallback)
 cd qadoc
 python3 -m http.server 8080
-# 브라우저에서 http://localhost:8080 접속
+# 랜딩: http://localhost:8080/   ·   앱(도구): http://localhost:8080/app.html
 
 # 방법 2) LLM 검토까지 포함해서 실행 (Pages Functions + Workers AI)
 cp .dev.vars.example .dev.vars       # 최초 1회
@@ -56,7 +56,7 @@ npx wrangler pages dev .
 # wrangler가 안내하는 주소로 접속 (보통 http://localhost:8788)
 ```
 
-> `index.html`을 더블클릭해도 동작하지만, 일부 브라우저 보안정책 때문에 정적 서버 실행을 권장합니다.
+> `/`는 랜딩페이지, 실제 도구는 `/app.html` 입니다. 정적 서버 실행을 권장합니다(브라우저 보안정책).
 > 내보내기 라이브러리(SheetJS·PptxGenJS)는 CDN에서 로드하므로 최초 실행 시 인터넷이 필요합니다.
 > LLM 검토는 방법 2에서만 동작합니다. 방법 1에서는 버튼을 눌러도 룰 검토 결과만 표시됩니다(정상 fallback).
 
@@ -76,13 +76,17 @@ npx wrangler pages dev .
 ## 프로젝트 구조
 
 ```
-index.html              앱 셸
+index.html              랜딩페이지 (QASS와 일관된 디자인)
+app.html                앱 셸 (실제 작성·검토 도구)
+landing.css             랜딩·정보 페이지 디자인 시스템 (QASS와 공유)
+about.html / privacy.html / terms.html / contact.html   정보 페이지
+robots.txt              파일럿이라 색인 차단(공개 시 해제)
 wrangler.toml           Cloudflare Pages 설정 (AI 바인딩, 환경변수)
 .dev.vars.example       로컬 환경변수 예시 (.dev.vars 는 깃 제외)
 functions/
   api/review.js         LLM 검토 프록시 (서버사이드, provider 교체형, 키 보관)
 src/
-  css/styles.css        스타일
+  css/styles.css        앱 스타일 (QASS 팔레트·Pretendard로 통일)
   data/
     presets.js          프리셋(템플릿) — 데이터
     rulesets.js         검토 기준(룰셋) — 데이터

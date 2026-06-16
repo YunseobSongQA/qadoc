@@ -1,27 +1,30 @@
+/* QASS와 일관된 디자인 토큰 (slate/blue 팔레트, Pretendard) */
 :root {
-  --bg: #f4f5f7;
+  --bg: #f8fafc;
   --panel: #ffffff;
-  --border: #e2e5ea;
-  --text: #1f2430;
-  --muted: #8a90a0;
-  --primary: #3b5bdb;
-  --primary-dark: #2f49b0;
+  --border: #e2e8f0;
+  --text: #0f172a;
+  --muted: #64748b;
+  --primary: #3b82f6;
+  --primary-dark: #2563eb;
+  --grad: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
   --review: #0ca678;
   --error: #e03131;
   --warning: #f08c00;
-  --info: #1c7ed6;
-  --radius: 8px;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --info: #2563eb;
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
 }
 
 * { box-sizing: border-box; }
 
 body {
   margin: 0;
-  font-family: -apple-system, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-family: 'Pretendard Variable', Pretendard, -apple-system, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   color: var(--text);
   background: var(--bg);
   font-size: 14px;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* ---------- 헤더 ---------- */
@@ -34,7 +37,11 @@ body {
   border-bottom: 1px solid var(--border);
 }
 .brand { display: flex; align-items: baseline; gap: 10px; }
-.brand-mark { font-weight: 800; font-size: 20px; letter-spacing: 0.5px; color: var(--primary); }
+.brand-mark {
+  font-weight: 800; font-size: 20px; letter-spacing: -0.5px; text-decoration: none;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
 .brand-sub { color: var(--muted); font-size: 13px; }
 .pilot-badge {
   background: #fff3bf; color: #a37200; font-weight: 700; font-size: 11px;
