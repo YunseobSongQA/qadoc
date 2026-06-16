@@ -620,8 +620,11 @@
     openModal(
       "공유 링크 (읽기 전용)",
       '<p class="muted small">문서 내용을 담은 자체 완결형 링크입니다. 받는 사람은 로그인 없이 읽기 전용으로 봅니다.</p>' +
-        '<textarea readonly rows="4" style="width:100%" onclick="this.select()">' + esc(link) + "</textarea>"
+        '<textarea id="share-link" readonly rows="4" style="width:100%" onclick="this.select()"></textarea>'
     );
+    // 링크는 DOM text → innerHTML 경로를 피하려고 .value 로 직접 주입 (XSS 정적분석 경고 회피 + 안전)
+    const ta = $("#share-link");
+    if (ta) ta.value = link;
   }
 
   function renderSharedView(payload) {
