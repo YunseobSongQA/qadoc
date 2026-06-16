@@ -1,0 +1,51 @@
+name: Security
+
+# 시크릿 스캔 + 의존성 리뷰. API 키가 실수로 커밋되는 것을 차단하는 게 1차 목표.
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+permissions:
+  contents: read
+
+jobs:
+  secret-scan:
+    name: Secret scan (gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 전체 히스토리 스캔
+      - name: gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  dependency-review:
+    name: Dependency review
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Dependency review
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+
+  guard:
+    name: Secret hygiene guard
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Ensure local secret files are not committed
+        run: |
+          if git ls-files --error-unmatch .dev.vars 2>/dev/null; then
+            echo "::error::.dev.vars 가 커밋되어 있습니다. 즉시 제거하고 키를 회전하세요."
+            exit 1
+          fi
+          echo "OK: .dev.vars 는 추적되지 않습니다."
