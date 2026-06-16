@@ -207,3 +207,17 @@ textarea { resize: vertical; width: 100%; }
 .ro-field { margin-bottom: 14px; }
 .ro-label { font-weight: 700; font-size: 12px; color: #495057; margin-bottom: 4px; }
 .ro-value { white-space: pre-wrap; background: #f8f9fa; border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; }
+
+/* ---------- 기준 편집 ---------- */
+.rules-bar { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+.rules-vers { max-height: 140px; overflow: auto; margin-bottom: 12px; }
+.ver-item.sel { background: #f1f3f5; border-radius: 6px; padding-left: 6px; }
+.btn-link { border: none; background: none; color: var(--primary); cursor: pointer; padding: 0; font-size: 13px; }
+.btn-link:hover { text-decoration: underline; }
+.rules-msg { margin: 8px 0; min-height: 16px; }
+.rules-msg.ok { color: var(--review); }
+.rules-msg.err { color: var(--error); }
+.rules-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.rules-help { margin-top: 8px; }
+.rules-help summary { cursor: pointer; font-size: 12px; color: var(--muted); }
+.rules-help code { background: #f1f3f5; padding: 1px 5px; border-radius: 3px; font-size: 11px; }
