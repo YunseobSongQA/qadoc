@@ -69,8 +69,10 @@ export async function onRequestPost(context) {
     const findings = await runProvider(provider, payload, env);
     return json({ kind: "llm", provider, findings }, 200, headers);
   } catch (err) {
-    // LLM 실패 → 클라이언트가 룰 결과로 fallback 하도록 503
-    return json({ error: "llm_unavailable", detail: String((err && err.message) || err) }, 503, headers);
+    // 내부 오류 상세(스택/메시지)는 클라이언트에 노출하지 않는다 — 서버 로그에만.
+    console.error("review error:", err);
+    // LLM 실패 → 클라이언트가 룰 결과로 fallback 하도록 503 (일반 메시지)
+    return json({ error: "llm_unavailable" }, 503, headers);
   }
 }
 
