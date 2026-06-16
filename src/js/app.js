@@ -571,19 +571,25 @@
     const all = [{ version: doc.currentVersion || 1, content: doc.content, savedAt: doc.updatedAt, current: true }].concat(past);
     const items = all
       .map((v) => {
-        historyCache[v.version] = v.content;
-        const when = v.savedAt ? new Date(v.savedAt).toLocaleString("ko-KR") : "";
+        const ver = Number(v.version); // 숫자 강제변환 = 안전(문자열 taint 차단)
+        historyCache[ver] = v.content;
         const tag = v.current ? '<span class="ver-cur">현재</span>' : "";
         const btn = v.current
           ? ""
-          : '<button class="btn btn-sm" data-action="restore-version" data-ver="' + v.version + '">되돌리기</button>';
+          : '<button class="btn btn-sm" data-action="restore-version" data-ver="' + ver + '">되돌리기</button>';
+        // 날짜(저장소 유래)는 innerHTML 미경유 — 렌더 후 textContent 로 주입
         return (
-          '<li class="ver-item"><div><strong>v' + v.version + "</strong> " + tag +
-          '<div class="muted small">' + esc(when) + "</div></div>" + btn + "</li>"
+          '<li class="ver-item"><div><strong>v' + ver + "</strong> " + tag +
+          '<div class="muted small hist-when" data-v="' + ver + '"></div></div>' + btn + "</li>"
         );
       })
       .join("");
     openModal("버전 이력", '<ul class="ver-list">' + items + "</ul>");
+    all.forEach((v) => {
+      const ver = Number(v.version);
+      const el = document.querySelector('.hist-when[data-v="' + ver + '"]');
+      if (el) el.textContent = v.savedAt ? new Date(v.savedAt).toLocaleString("ko-KR") : "";
+    });
   }
 
   function restoreVersion(ver) {
@@ -684,7 +690,7 @@
         .map(
           (t) =>
             '<button class="btn btn-sm' + (t === type ? " btn-primary" : "") + '" data-action="rules-pick" data-type="' +
-            t + '" data-ver="' + QADOC.rules.active(t).version + '">' +
+            t + '" data-ver="' + Number(QADOC.rules.active(t).version) + '">' +
             (t === "testcase" ? "TC" : "기획서") + "</button>"
         )
         .join(" ");
@@ -693,15 +699,16 @@
     // 렌더 후 textContent 로 주입한다 (정적 분석상 DOM text→HTML 흐름 차단 + XSS 안전).
     const verItems = versions
       .map((v) => {
+        const ver = Number(v.version); // 숫자 강제변환 = 안전
         const tag = v.active ? '<span class="ver-cur">활성</span>' : "";
         const here = v.version === showVer ? " sel" : "";
         const act = v.active
           ? ""
-          : '<button class="btn btn-sm" data-action="rules-activate" data-type="' + type + '" data-ver="' + v.version + '">활성화</button>';
+          : '<button class="btn btn-sm" data-action="rules-activate" data-type="' + type + '" data-ver="' + ver + '">활성화</button>';
         return (
           '<li class="ver-item' + here + '">' +
-          '<div><button class="btn-link" data-action="rules-pick" data-type="' + type + '" data-ver="' + v.version + '"><strong>v' + v.version + "</strong></button> " +
-          tag + ' <span class="muted small vn" data-vn="' + v.version + '"></span></div>' + act + "</li>"
+          '<div><button class="btn-link" data-action="rules-pick" data-type="' + type + '" data-ver="' + ver + '"><strong>v' + ver + "</strong></button> " +
+          tag + ' <span class="muted small vn" data-vn="' + ver + '"></span></div>' + act + "</li>"
         );
       })
       .join("");
