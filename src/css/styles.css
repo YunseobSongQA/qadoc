@@ -221,3 +221,20 @@ textarea { resize: vertical; width: 100%; }
 .rules-help { margin-top: 8px; }
 .rules-help summary { cursor: pointer; font-size: 12px; color: var(--muted); }
 .rules-help code { background: #f1f3f5; padding: 1px 5px; border-radius: 3px; font-size: 11px; }
+
+/* ---------- 정적 정보 페이지 (소개/개인정보/약관/문의) ---------- */
+.page-back { color: var(--muted); font-size: 13px; text-decoration: none; }
+.page-back:hover { color: var(--primary); }
+.page-wrap { max-width: 760px; margin: 0 auto; padding: 32px 20px 64px; }
+.page-wrap h1 { font-size: 24px; margin-bottom: 4px; }
+.page-wrap h2 { font-size: 16px; margin-top: 28px; color: #2b3140; }
+.page-wrap p, .page-wrap li { line-height: 1.75; color: #333; }
+.page-wrap ul { padding-left: 20px; }
+.page-wrap a { color: var(--primary); }
+.page-meta { color: var(--muted); font-size: 12px; }
+.page-foot { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 13px; color: var(--muted); }
+
+/* 사이드바 하단 링크 */
+.sidebar-footer { font-size: 11px; color: var(--muted); }
+.sidebar-footer a { color: var(--muted); text-decoration: none; }
+.sidebar-footer a:hover { color: var(--primary); text-decoration: underline; }
