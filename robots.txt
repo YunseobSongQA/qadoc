@@ -1,0 +1,10 @@
+# QADOC — 현재 내부 파일럿 단계라 검색 색인을 막아둡니다.
+# 공개 출시(및 AdSense 등 적용) 시 아래 Disallow 를 제거하고
+# Allow: / + Sitemap 을 활성화하세요.
+User-agent: *
+Disallow: /
+
+# 공개 출시 시 예시:
+# User-agent: *
+# Allow: /
+# Sitemap: https://qadoc.pages.dev/sitemap.xml
