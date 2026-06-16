@@ -132,6 +132,16 @@
       if (error) throw error;
     },
 
+    async getVersions(id) {
+      const { data, error } = await client
+        .from("document_versions")
+        .select("*")
+        .eq("document_id", id)
+        .order("version", { ascending: false });
+      if (error) throw error;
+      return (data || []).map((r) => ({ version: r.version, content: r.content, savedAt: r.created_at }));
+    },
+
     // ── 프리셋 ──
     async listUserPresets() {
       // 시스템 기본 프리셋은 프론트 DATA 에 이미 있으므로, 여기선 사용자/원격 프리셋만

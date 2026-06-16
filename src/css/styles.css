@@ -165,3 +165,45 @@ textarea { resize: vertical; width: 100%; }
   opacity: 0; transition: all 0.25s; pointer-events: none; z-index: 100; box-shadow: var(--shadow);
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ---------- 버튼 변형 ---------- */
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+
+/* ---------- 모달 ---------- */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(31, 36, 48, 0.45);
+  display: flex; align-items: center; justify-content: center; z-index: 200;
+}
+.modal {
+  background: var(--panel); border-radius: var(--radius); width: min(560px, 92vw);
+  max-height: 80vh; overflow: auto; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+}
+.modal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px; border-bottom: 1px solid var(--border); font-weight: 700;
+  position: sticky; top: 0; background: var(--panel);
+}
+.modal-x { border: none; background: none; font-size: 20px; cursor: pointer; color: var(--muted); }
+.modal-body { padding: 16px; }
+
+/* ---------- 버전 이력 ---------- */
+.ver-list { list-style: none; margin: 0; padding: 0; }
+.ver-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.ver-cur {
+  font-size: 10px; font-weight: 700; color: #fff; background: var(--review);
+  padding: 2px 6px; border-radius: 3px; margin-left: 4px;
+}
+
+/* ---------- 공유 읽기전용 보기 ---------- */
+.share-banner {
+  background: #fff3bf; color: #a37200; font-weight: 700;
+  padding: 10px 16px; border-bottom: 1px solid var(--border);
+}
+.ro-doc { padding: 18px; }
+.ro-doc h2 { margin-top: 0; }
+.ro-field { margin-bottom: 14px; }
+.ro-label { font-weight: 700; font-size: 12px; color: #495057; margin-bottom: 4px; }
+.ro-value { white-space: pre-wrap; background: #f8f9fa; border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; }

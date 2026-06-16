@@ -9,6 +9,7 @@
     presets: [],
     current: null // { id?, type, presetId, title, content }
   };
+  let historyCache = {}; // version -> content (이력 되돌리기용)
 
   // ---------- 유틸 ----------
   function esc(s) {
@@ -45,6 +46,12 @@
   // ---------- 부트(1회) + 렌더 ----------
   function boot() {
     bindEvents();
+    // 공유 링크로 열렸으면 읽기 전용 보기
+    const sh = new URLSearchParams(location.search).get("share");
+    if (sh) {
+      renderSharedView(QADOC.share.decode(sh));
+      return;
+    }
     if (usingSupabase() && store().client) {
       // 로그인/로그아웃 시 화면 갱신
       store().client.auth.onAuthStateChange(function () {
@@ -138,6 +145,14 @@
         return exportCurrent();
       case "export-all":
         return exportAllOfType();
+      case "history":
+        return showHistory();
+      case "share":
+        return shareCurrent();
+      case "restore-version":
+        return restoreVersion(Number(el.getAttribute("data-ver")));
+      case "modal-close":
+        return closeModal();
       case "signin":
         return signIn();
       case "signout":
@@ -233,6 +248,9 @@
 
     const fieldsHtml = preset.fields.map((f) => renderField(f, cur.content[f.key])).join("");
 
+    // TC는 Excel, 기획서는 PPT로 내보내기
+    const exportLabel = cur.type === "testcase" ? "Excel 내보내기" : "PPT 내보내기";
+
     $("#editor").innerHTML =
       '<div class="editor-toolbar">' +
       '<div class="toolbar-left">' +
@@ -243,7 +261,9 @@
       '<button class="btn btn-review" data-action="review">검토</button>' +
       '<button class="btn" data-action="review-llm" title="무료 LLM으로 문장 명확성·모호성 보조 검토">LLM 검토</button>' +
       '<button class="btn" data-action="save">저장</button>' +
-      '<button class="btn" data-action="export">Excel 내보내기</button>' +
+      '<button class="btn" data-action="export">' + exportLabel + "</button>" +
+      '<button class="btn" data-action="history">이력</button>' +
+      '<button class="btn" data-action="share">공유</button>' +
       "</div>" +
       "</div>" +
       '<div class="form-grid">' +
@@ -450,7 +470,11 @@
     flash("저장되었습니다 (v" + (saved.currentVersion || 1) + ")");
   }
 
-  // ---------- 내보내기 ----------
+  // ---------- 내보내기 (TC→Excel, 기획서→PPT) ----------
+  function exporterFor(type) {
+    return type === "testcase" ? QADOC.exportExcel : QADOC.exportPpt;
+  }
+
   function exportCurrent() {
     syncFormToState();
     const cur = state.current;
@@ -459,7 +483,11 @@
       alert("내보낼 내용이 없습니다.");
       return;
     }
-    QADOC.exportExcel.exportDocument(cur, preset);
+    try {
+      exporterFor(cur.type).exportDocument(cur, preset);
+    } catch (e) {
+      alert("내보내기 실패: " + (e.message || e));
+    }
   }
 
   async function exportAllOfType() {
@@ -471,7 +499,7 @@
       alert("내보낼 저장 문서가 없습니다.");
       return;
     }
-    QADOC.exportExcel.exportAll(docs, preset, "qadoc-" + cur.type);
+    exporterFor(cur.type).exportAll(docs, preset, "qadoc-" + cur.type);
   }
 
   // ---------- 프리셋 업로드 ----------
@@ -506,6 +534,120 @@
     return p && typeof p.id === "string" &&
       (p.type === "testcase" || p.type === "spec") &&
       Array.isArray(p.fields) && p.fields.length > 0;
+  }
+
+  // ---------- 버전 이력 ----------
+  async function showHistory() {
+    const cur = state.current;
+    if (!cur || !cur.id) {
+      alert("먼저 저장한 문서여야 이력이 있습니다.");
+      return;
+    }
+    const doc = await store().getDocument(cur.id);
+    let past = [];
+    try {
+      past = await store().getVersions(cur.id);
+    } catch (e) {
+      /* ignore */
+    }
+    historyCache = {};
+    const all = [{ version: doc.currentVersion || 1, content: doc.content, savedAt: doc.updatedAt, current: true }].concat(past);
+    const items = all
+      .map((v) => {
+        historyCache[v.version] = v.content;
+        const when = v.savedAt ? new Date(v.savedAt).toLocaleString("ko-KR") : "";
+        const tag = v.current ? '<span class="ver-cur">현재</span>' : "";
+        const btn = v.current
+          ? ""
+          : '<button class="btn btn-sm" data-action="restore-version" data-ver="' + v.version + '">되돌리기</button>';
+        return (
+          '<li class="ver-item"><div><strong>v' + v.version + "</strong> " + tag +
+          '<div class="muted small">' + esc(when) + "</div></div>" + btn + "</li>"
+        );
+      })
+      .join("");
+    openModal("버전 이력", '<ul class="ver-list">' + items + "</ul>");
+  }
+
+  function restoreVersion(ver) {
+    const content = historyCache[ver];
+    if (!content) return;
+    state.current.content = Object.assign({}, content);
+    renderEditor();
+    closeModal();
+    flash("v" + ver + " 내용을 불러왔습니다. 저장하면 새 버전이 됩니다.");
+  }
+
+  // ---------- 공유 (자체 완결형 읽기 전용 링크) ----------
+  function shareCurrent() {
+    syncFormToState();
+    const cur = state.current;
+    const preset = presetById(cur.presetId);
+    if (!cur.title && Object.keys(cur.content).length === 0) {
+      alert("공유할 내용이 없습니다.");
+      return;
+    }
+    const payload = {
+      t: cur.type,
+      ti: cur.title,
+      c: cur.content,
+      f: preset.fields.map((f) => ({ key: f.key, label: f.label, type: f.type }))
+    };
+    const link = location.origin + location.pathname + "?share=" + QADOC.share.encode(payload);
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(link).then(
+        () => flash("공유 링크를 복사했습니다."),
+        () => {}
+      );
+    }
+    openModal(
+      "공유 링크 (읽기 전용)",
+      '<p class="muted small">문서 내용을 담은 자체 완결형 링크입니다. 받는 사람은 로그인 없이 읽기 전용으로 봅니다.</p>' +
+        '<textarea readonly rows="4" style="width:100%" onclick="this.select()">' + esc(link) + "</textarea>"
+    );
+  }
+
+  function renderSharedView(payload) {
+    if (!payload) {
+      $("#editor").innerHTML = '<div class="empty-state"><h2>잘못된 공유 링크</h2><p>링크가 손상되었거나 만료되었습니다.</p></div>';
+      $("#doc-list").innerHTML = '<li class="muted small">공유 보기 모드</li>';
+      return;
+    }
+    const typeName = payload.t === "testcase" ? "테스트케이스" : "기획서";
+    const rows = (payload.f || [])
+      .map((f) => {
+        const v = payload.c ? payload.c[f.key] : "";
+        const val = Array.isArray(v) ? v.join("\n") : v == null ? "" : String(v);
+        return (
+          '<div class="ro-field"><div class="ro-label">' + esc(f.label) + "</div>" +
+          '<div class="ro-value">' + esc(val).replace(/\n/g, "<br>") + "</div></div>"
+        );
+      })
+      .join("");
+    $("#editor").innerHTML =
+      '<div class="share-banner">📎 공유된 ' + typeName + " (읽기 전용)</div>" +
+      '<div class="ro-doc"><h2>' + esc(payload.ti || "(제목 없음)") + "</h2>" + rows + "</div>";
+    $("#doc-list").innerHTML = '<li class="muted small">공유 보기 모드</li>';
+    $("#review-output").innerHTML = '<p class="muted small">읽기 전용 공유 보기입니다.</p>';
+  }
+
+  // ---------- 모달 ----------
+  function openModal(title, bodyHtml) {
+    closeModal();
+    const overlay = document.createElement("div");
+    overlay.id = "modal-overlay";
+    overlay.className = "modal-overlay";
+    overlay.setAttribute("data-action", "modal-close");
+    overlay.innerHTML =
+      '<div class="modal" onclick="event.stopPropagation()">' +
+      '<div class="modal-head"><span>' + esc(title) + "</span>" +
+      '<button class="modal-x" data-action="modal-close">×</button></div>' +
+      '<div class="modal-body">' + bodyHtml + "</div></div>";
+    document.body.appendChild(overlay);
+  }
+  function closeModal() {
+    const el = document.getElementById("modal-overlay");
+    if (el) el.remove();
   }
 
   // ---------- 토스트 ----------
