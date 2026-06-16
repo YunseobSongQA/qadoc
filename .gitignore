@@ -1,0 +1,13 @@
+# 로컬 시크릿 — 절대 커밋 금지
+.dev.vars
+src/js/config.js
+
+# Wrangler / Cloudflare
+.wrangler/
+
+# 의존성 / 빌드 산출물
+node_modules/
+.DS_Store
+
+# 요구사항 메모 (저장소에 포함하지 않음)
+prompt*.txt

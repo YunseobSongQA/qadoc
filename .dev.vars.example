@@ -1,0 +1,10 @@
+# 로컬 개발용 환경변수 예시.
+# 복사해서 .dev.vars 로 만들고 채우세요:  cp .dev.vars.example .dev.vars
+# .dev.vars 는 절대 깃에 커밋하지 마세요 (.gitignore 에 등록됨).
+
+# 시작은 Cloudflare Workers AI 무료 티어 (키 불필요)
+LLM_PROVIDER=cloudflare
+
+# 품질이 아쉬우면 Anthropic Claude Haiku로 교체:
+#   LLM_PROVIDER=anthropic
+#   ANTHROPIC_API_KEY=sk-ant-...
