@@ -119,7 +119,7 @@ src/
 
 - **Phase 2** — LLM 검토(provider 추상화 + Cloudflare Workers AI 무료티어, 룰 fallback, rate limit) ✅ 구현. Anthropic Claude Haiku 교체는 확장 지점만 남김(미구현).
 - **Phase 3** — ✅ 유형별 내보내기(TC→Excel, 기획서→PPT), 공유 링크(읽기전용), 버전 이력 UI
-- **Phase 4** — ✅ CI/CD 보안 자동검사(CodeQL·시크릿·의존성, `.github/workflows/`) + Supabase 스키마·RLS·어댑터(`supabase/schema.sql`, `SUPABASE.md`). localStorage 기본 유지, Supabase는 설정 시 전환(async 전환은 라이브 검증 단계로 분리).
+- **Phase 4** — ✅ CI/CD 보안 자동검사(시크릿 스캔·시크릿 위생 가드·의존성 리뷰, `.github/workflows/security.yml`) + Supabase 스키마·RLS·어댑터(`supabase/schema.sql`, `SUPABASE.md`). localStorage 기본 유지, Supabase는 설정 시 전환(async 전환은 라이브 검증 단계로 분리). SAST(CodeQL)는 파일럿에선 비활성 — 정식 단계에서 비차단으로 재추가 예정.
 - **Phase 5** — 축적 데이터 기반 통계/리포트로 기준 정립 보조
 
 보안·배포 상세는 [SUPABASE.md](SUPABASE.md) 참고.

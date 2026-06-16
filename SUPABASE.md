@@ -49,6 +49,7 @@ function store() { return QADOC.storageSupabase || QADOC.storage; }
 - [x] RLS 활성화 + 소유자 기반 정책 (`schema.sql`)
 - [x] 공유 링크는 토큰+만료 검증하는 SECURITY DEFINER 함수로만 읽기
 - [x] 시크릿은 환경변수/Secret, `.dev.vars`/`config.js`는 `.gitignore`
-- [x] CI 자동 검사: CodeQL + 시크릿 스캔(gitleaks) + 의존성 리뷰 (`.github/workflows/`)
+- [x] CI 자동 검사: 시크릿 스캔(gitleaks) + 시크릿 위생 가드 + 의존성 리뷰 (`.github/workflows/security.yml`)
+- [ ] SAST(CodeQL) — 파일럿에선 비활성. 정식 단계에서 모달 코드 정리 후 비차단(report-only)으로 재추가 예정
 - [x] HTTPS/DDoS는 Cloudflare 앞단
 - [ ] (별도 단계) 금융권/공공 컴플라이언스 체크리스트 — 코드만으로 보장 불가, 인증·감리 영역
