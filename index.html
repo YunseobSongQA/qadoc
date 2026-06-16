@@ -3,79 +3,187 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QADOC — TC·기획서 표준 작성</title>
-  <meta name="description" content="QADOC — TC(테스트케이스)와 기획서를 공통 기준으로 작성·검토하는 표준화 도구. 누가 작성하든 동일한 기준으로 문서 품질을 맞춥니다." />
-  <meta name="theme-color" content="#3b5bdb" />
+  <title>QADOC — TC·기획서를 공통 기준으로 작성·검토하는 표준화 도구</title>
+  <meta name="description" content="QADOC은 테스트케이스와 기획서를 공통 기준으로 작성·검토하는 도구입니다. 프리셋 기반 작성, 룰베이스 자동 검토, Excel·PPT 내보내기까지 한 곳에서." />
   <meta property="og:title" content="QADOC — TC·기획서 표준 작성/검토" />
-  <meta property="og:description" content="누가 작성하든 공통 기준으로 작성·검토되는 QA 문서 표준화 서비스." />
+  <meta property="og:description" content="누가 작성하든 공통 기준으로 작성·검토되는 QA 문서 표준화 도구." />
   <meta property="og:type" content="website" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%233b5bdb'/%3E%3Ctext x='16' y='22' font-size='16' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3EQ%3C/text%3E%3C/svg%3E" />
-  <link rel="stylesheet" href="src/css/styles.css" />
-  <!-- SheetJS (Excel 내보내기) / PptxGenJS (PPT 내보내기) — 클라이언트 사이드 -->
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+  <meta name="theme-color" content="#2563eb" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%232563eb'/%3E%3Ctext x='16' y='22' font-size='16' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3EQ%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="landing.css" />
 </head>
 <body>
-  <header class="app-header">
-    <div class="brand">
-      <span class="brand-mark">QADOC</span>
-      <span class="brand-sub">TC · 기획서 표준 작성 / 검토</span>
-    </div>
-    <div class="header-actions">
-      <span class="pilot-badge">PILOT</span>
+
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="index.html" class="site-logo">QADOC</a>
+      <nav class="site-nav">
+        <a href="about.html">소개</a>
+        <a href="#features">기능</a>
+        <a href="#faq">FAQ</a>
+        <a href="privacy.html">개인정보처리방침</a>
+      </nav>
+      <a href="app.html" class="btn-cta btn-cta-sm">앱 시작하기</a>
     </div>
   </header>
 
-  <main class="layout">
-    <!-- 좌측: 문서 목록 -->
-    <aside class="sidebar">
-      <div class="sidebar-section">
-        <button class="btn btn-primary block" data-action="new-testcase">+ 새 테스트케이스</button>
-        <button class="btn btn-primary block" data-action="new-spec">+ 새 기획서</button>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-title">내 문서</div>
-        <ul id="doc-list" class="doc-list"></ul>
-      </div>
-      <div class="sidebar-section">
-        <label class="btn btn-ghost block" for="preset-file">⬆ 양식(프리셋) 가져오기</label>
-        <input type="file" id="preset-file" accept="application/json" hidden />
-        <p class="hint">회사 양식 JSON을 업로드하면 작성 폼에 반영됩니다.</p>
-      </div>
-      <div class="sidebar-section">
-        <button class="btn btn-ghost block" data-action="rules-open">⚙ 검토 기준 편집</button>
-        <p class="hint">룰을 화면에서 추가/수정하고 버전으로 관리·전환합니다.</p>
-      </div>
-      <div class="sidebar-section sidebar-footer">
-        <a href="about.html">소개</a> · <a href="privacy.html">개인정보</a> · <a href="terms.html">약관</a> · <a href="contact.html">문의</a>
-      </div>
-    </aside>
+  <!-- 히어로 -->
+  <section class="hero">
+    <span class="hero-badge">✨ QA 문서 표준화 도구</span>
+    <h1>작성자가 달라도, 기준은 같게<br><span class="grad-text">TC·기획서를 표준 품질로</span></h1>
+    <p class="hero-sub">
+      QADOC은 테스트케이스와 기획서를 <strong>공통 기준</strong>으로 작성·검토하는 도구입니다.
+      프리셋 폼으로 작성하면 필수항목 누락·형식·모호한 표현을 자동으로 점검하고, 개선 가이드까지
+      제시합니다. 누가 작성하든 같은 기준으로 문서 품질을 맞춥니다.
+    </p>
+    <div class="hero-actions">
+      <a href="app.html" class="btn-cta">무료로 시작하기 →</a>
+      <a href="about.html" class="btn-ghost">자세히 보기</a>
+    </div>
+    <p class="hero-note">회원가입 없이 브라우저에서 바로 작성·검토할 수 있습니다.</p>
+  </section>
 
-    <!-- 중앙: 편집 -->
-    <section class="editor-area">
-      <div id="editor"></div>
-    </section>
-
-    <!-- 우측: 검토 결과 -->
-    <aside class="review-panel">
-      <div class="review-header">검토 결과</div>
-      <div id="review-output" class="review-output">
-        <p class="muted">작성 후 <strong>검토</strong> 버튼을 눌러보세요.</p>
+  <!-- 주요 기능 -->
+  <section class="section" id="features">
+    <h2 class="section-title">주요 기능</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📝</div>
+        <h3>프리셋 기반 작성</h3>
+        <p>
+          테스트케이스·기획서용 표준 프리셋을 폼으로 채우기만 하면 됩니다. 작성자마다 양식이
+          달라지는 문제를 없애고, 회사 양식을 JSON으로 업로드해 그대로 반영할 수도 있습니다.
+        </p>
       </div>
-    </aside>
-  </main>
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>룰베이스 자동 검토</h3>
+        <p>
+          "검토" 버튼을 누르면 필수항목 누락, 형식 오류, 모호한 표현을 기준에 따라 검사하고
+          미흡 항목마다 개선 가이드를 제시합니다. LLM 없이 동작해 비용이 들지 않습니다.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3>LLM 보조 검토 (선택)</h3>
+        <p>
+          룰로 잡기 어려운 문장 명확성·모호성은 무료 LLM이 보조로 점검합니다. 키는 서버에만
+          보관되며, LLM이 막혀도 룰 검토 결과는 항상 표시됩니다.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📤</div>
+        <h3>내보내기 · 공유 · 이력</h3>
+        <p>
+          테스트케이스는 Excel, 기획서는 PPT로 내보냅니다. 읽기전용 공유 링크를 만들고,
+          저장 시 버전 이력이 쌓여 언제든 이전 버전으로 되돌릴 수 있습니다.
+        </p>
+      </div>
+    </div>
+  </section>
 
-  <!-- 데이터 (프리셋 / 룰셋) — 코드 수정 없이 교체/업로드 가능 -->
-  <script src="src/data/presets.js"></script>
-  <script src="src/data/rulesets.js"></script>
-  <!-- 로직 모듈 -->
-  <script src="src/js/storage.js"></script>
-  <script src="src/js/review-engine.js"></script>
-  <script src="src/js/rules-store.js"></script>
-  <script src="src/js/review-llm.js"></script>
-  <script src="src/js/export-excel.js"></script>
-  <script src="src/js/export-ppt.js"></script>
-  <script src="src/js/share.js"></script>
-  <script src="src/js/app.js"></script>
+  <!-- 작동 방식 -->
+  <section class="section section-alt">
+    <h2 class="section-title">작동 방식</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>프리셋 선택·작성</h3>
+        <p>테스트케이스 또는 기획서 프리셋을 열어 폼에 내용을 채웁니다.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>검토</h3>
+        <p>검토 버튼으로 필수항목·형식·모호 표현을 점검하고 개선 가이드를 확인합니다.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>내보내기·공유</h3>
+        <p>Excel·PPT로 저장하거나 읽기전용 링크로 공유하고, 버전 이력으로 관리합니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 콘텐츠: 왜 표준화인가 -->
+  <section class="section">
+    <h2 class="section-title">문서 기준 표준화, 왜 필요할까요?</h2>
+    <div class="prose">
+      <p>
+        같은 기능을 검증하는 테스트케이스라도 작성자마다 양식과 상세도가 다르면, 읽는 사람은
+        매번 구조를 새로 파악해야 합니다. 기획서도 마찬가지입니다. 이 "파악 시간"의 편차는 곧
+        테스트·개발 속도의 편차로 이어지고, 누락과 재작업을 만듭니다.
+      </p>
+      <p>
+        QADOC은 작성 단계에서부터 <strong>공통 기준</strong>을 적용합니다. 프리셋이 무엇을 적어야 하는지
+        안내하고, 룰베이스 검토가 필수항목 누락·형식·모호 표현을 그 자리에서 짚어줍니다. 검토
+        기준은 코드가 아니라 데이터로 관리되어, 화면에서 룰을 수정하고 버전으로 전환할 수 있습니다.
+      </p>
+      <p>
+        결과적으로 누가 작성하든 일정 수준 이상의 문서가 나오고, 검토자는 표준에서 벗어난 부분에만
+        집중할 수 있습니다. QADOC의 구체적인 사용법은 <a href="about.html">소개 페이지</a>에서 확인하세요.
+      </p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section section-alt" id="faq">
+    <h2 class="section-title">자주 묻는 질문</h2>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>회원가입이 필요한가요?</summary>
+        <p>아니요. 브라우저에서 바로 작성·검토할 수 있습니다. 작성 내용은 기본적으로 사용자 브라우저에 저장됩니다.</p>
+      </details>
+      <details class="faq-item">
+        <summary>정말 무료인가요?</summary>
+        <p>네. 작성·룰베이스 검토·내보내기·공유·이력 기능은 무료로 동작합니다. LLM 보조 검토도 무료 티어로 시작합니다.</p>
+      </details>
+      <details class="faq-item">
+        <summary>검토 기준을 우리 팀에 맞게 바꿀 수 있나요?</summary>
+        <p>
+          가능합니다. "검토 기준 편집"에서 룰을 화면에서 추가·수정하고 버전으로 관리·전환할 수
+          있습니다. 검토 엔진은 항상 활성 버전 기준을 사용하므로 편집 즉시 반영됩니다.
+        </p>
+      </details>
+      <details class="faq-item">
+        <summary>테스트케이스와 기획서는 어떻게 내보내나요?</summary>
+        <p>문서 유형에 맞춰 자동으로 전환됩니다 — 테스트케이스는 Excel(.xlsx), 기획서는 PPT(.pptx)로 내보냅니다.</p>
+      </details>
+      <details class="faq-item">
+        <summary>작성한 문서는 어디에 저장되나요?</summary>
+        <p>
+          현재 파일럿 단계에서는 사용자 브라우저(localStorage)에 저장됩니다. 자세한 내용은
+          <a href="privacy.html">개인정보처리방침</a>을 참고하세요.
+        </p>
+      </details>
+    </div>
+  </section>
+
+  <!-- 마지막 CTA -->
+  <section class="section cta-section">
+    <h2>지금 바로 작성해 보세요</h2>
+    <p>설치 없이, 회원가입 없이 — 표준 품질의 TC·기획서를 바로 만들 수 있습니다.</p>
+    <a href="app.html" class="btn-cta">QADOC 시작하기 →</a>
+  </section>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="footer-brand">
+        <div class="site-logo">QADOC</div>
+        <p>TC·기획서를 공통 기준으로 작성·검토하는 표준화 도구</p>
+      </div>
+      <div class="footer-links">
+        <a href="app.html">앱 시작하기</a>
+        <a href="about.html">소개</a>
+        <a href="terms.html">이용약관</a>
+        <a href="privacy.html">개인정보처리방침</a>
+      </div>
+      <div class="footer-contact">
+        <p>문의: <a href="mailto:dwa3432@gmail.com">dwa3432@gmail.com</a></p>
+        <p class="footer-copy">© 2026 QADOC. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>
