@@ -57,6 +57,7 @@
         existing.title = doc.title;
         existing.content = doc.content;
         existing.presetId = doc.presetId;
+        if (doc.linkedId !== undefined) existing.linkedId = doc.linkedId;
         existing.currentVersion = (existing.currentVersion || 1) + 1;
         existing.updatedAt = now;
         docs[idx] = existing;

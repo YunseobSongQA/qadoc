@@ -1,18 +1,6 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-:root {
-  --bg: #f8fafc;
-  --surface: #ffffff;
-  --border: #e2e8f0;
-  --text: #0f172a;
-  --text-muted: #64748b;
-  --primary: #3b82f6;
-  --primary-dark: #2563eb;
-  --grad: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
-  --radius: 20px;
-  --shadow-sm: 0 1px 3px rgba(15,23,42,.06);
-  --shadow-md: 0 10px 30px rgba(15,23,42,.10);
-}
+/* 디자인 토큰은 theme.css(라이트/다크 공용)에서 정의한다. */
 
 html { scroll-behavior: smooth; }
 
@@ -325,7 +313,7 @@ img { max-width: 100%; }
 
 .prose p {
   font-size: 15.5px;
-  color: #334155;
+  color: var(--text-secondary);
   margin-bottom: 18px;
   word-break: keep-all;
   overflow-wrap: break-word;
@@ -349,7 +337,7 @@ img { max-width: 100%; }
 .prose ul, .prose ol {
   margin: 0 0 18px 20px;
   font-size: 15.5px;
-  color: #334155;
+  color: var(--text-secondary);
 }
 
 .prose li { margin-bottom: 8px; word-break: keep-all; overflow-wrap: break-word; }
@@ -592,3 +580,34 @@ img { max-width: 100%; }
     padding: 36px 20px;
   }
 }
+
+/* ── 헤더 테마 토글 (어두운 헤더 위) ──────────────────────────── */
+.site-header .theme-toggle {
+  width: 36px; height: 36px; flex-shrink: 0;
+  border: 1.5px solid rgba(148, 163, 184, 0.4);
+  color: #cbd5e1;
+}
+.site-header .theme-toggle:hover {
+  background-color: rgba(148, 163, 184, 0.15);
+  border-color: #60a5fa;
+}
+.site-header .theme-toggle svg { width: 17px; height: 17px; }
+
+/* 기능 카드 아이콘(라인 SVG) */
+.feature-icon .ic { width: 26px; height: 26px; color: var(--primary); }
+.hero-badge .ic { width: 14px; height: 14px; vertical-align: -2px; margin-right: 5px; color: var(--primary-dark); }
+.btn-cta .ic, .btn-ghost .ic { width: 16px; height: 16px; vertical-align: -3px; margin-left: 4px; }
+
+/* ── 다크 모드 보정 (밝은 틴트 영역) ──────────────────────────── */
+[data-theme="dark"] .hero-badge { background: var(--accent-subtle); border-color: var(--border); color: var(--primary); }
+[data-theme="dark"] .hero::before {
+  background:
+    radial-gradient(55% 45% at 50% 0%, rgba(110,139,255,.16) 0%, transparent 70%),
+    radial-gradient(35% 35% at 78% 18%, rgba(155,123,255,.12) 0%, transparent 70%);
+}
+[data-theme="dark"] .feature-icon { background: var(--accent-subtle); border-color: var(--border); }
+[data-theme="dark"] .faq-item summary::before,
+[data-theme="dark"] .prose .callout { background: var(--accent-subtle); border-color: var(--border); color: var(--text); }
+[data-theme="dark"] .faq-item[open] { border-color: var(--primary); }
+[data-theme="dark"] .btn-ghost:hover { background: var(--surface-2); border-color: var(--border-strong); }
+[data-theme="dark"] .prose code { background: var(--surface-2); }

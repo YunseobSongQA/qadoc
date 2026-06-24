@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>소개 — QADOC</title>
   <meta name="description" content="QADOC 소개 — TC와 기획서를 공통 기준으로 작성·검토하는 표준화 도구의 목적과 기능." />
-  <meta name="theme-color" content="#2563eb" />
+  <meta name="theme-color" content="#4f6ef7" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="src/css/theme.css" />
   <link rel="stylesheet" href="landing.css" />
+  <script src="src/js/theme.js"></script>
 </head>
 <body>
 
@@ -20,6 +22,7 @@
         <a href="index.html#faq">FAQ</a>
         <a href="privacy.html">개인정보처리방침</a>
       </nav>
+      <button class="theme-toggle" data-theme-toggle aria-label="테마 전환"></button>
       <a href="app.html" class="btn-cta btn-cta-sm">앱 시작하기</a>
     </div>
   </header>
@@ -28,28 +31,27 @@
     <h1 class="page-title">QADOC 소개</h1>
     <div class="prose">
       <p>
-        QADOC은 <strong>테스트케이스(TC)와 기획서를 한 곳에서, 표준화된 기준으로 작성·검토</strong>하도록
-        돕는 문서 도구입니다. 작성자마다 양식과 기준이 달라 생기는 가독성·파악 시간 편차를 줄이고,
-        누가 작성하든 공통 기준으로 작성·검토되도록 가이드라인을 시스템화하는 것을 목표로 합니다.
+        QADOC은 이전 자료의 증적을 바탕으로 <strong>기획서와 테스트케이스의 일관성</strong>을 점검하고,
+        어디를 보완하면 좋을지 조언하는 문서 도구입니다. 작성자마다 양식과 기준이 달라 생기는 편차를 줄이고,
+        검토 기준을 팀이 직접 쌓아 회사의 노하우로 시스템화하는 것을 목표로 합니다.
       </p>
 
       <h2>주요 기능</h2>
       <ul>
-        <li><strong>프리셋 기반 작성</strong> — TC·기획서용 템플릿으로 폼에서 작성, 회사 양식 JSON 업로드 지원</li>
-        <li><strong>룰베이스 검토</strong> — 필수항목 누락·형식·모호 표현 검사 + 개선 가이드 (비용 0, 항상 동작)</li>
-        <li><strong>LLM 보조 검토</strong> — 문장 명확성·모호성 등 룰로 못 잡는 부분 보조 (선택, 무료 티어)</li>
-        <li><strong>내보내기</strong> — 테스트케이스는 Excel, 기획서는 PPT</li>
-        <li><strong>저장·버전 이력·공유</strong> — 저장 시 버전 적립, 되돌리기, 읽기전용 공유 링크</li>
-        <li><strong>검토 기준 편집</strong> — 룰을 화면에서 추가/수정하고 버전으로 관리·전환</li>
+        <li><strong>일관성 점검 · 조언</strong> — 기획서 요구사항이 연결된 TC로 충분히 검증되는지 점검하고 보완 지점을 안내</li>
+        <li><strong>쌓이는 검토 기준</strong> — 기준을 평범한 문장으로 추가·수정하고 버전으로 관리, 팀의 노하우가 그대로 자산이 됨</li>
+        <li><strong>기본 틀 · 예시 제공</strong> — TC·기획서 기본 틀과 채워진 예시를 라이브러리에서 바로 열어 시작</li>
+        <li><strong>자동 검토 + LLM 보조</strong> — 필수항목 누락·형식·모호 표현 검사 + 개선 가이드, 문장 명확성은 LLM이 보조</li>
+        <li><strong>내보내기 · 공유 · 이력</strong> — TC는 Excel, 기획서는 PPT / 읽기전용 공유 링크 / 저장 시 버전 적립</li>
       </ul>
 
-      <h2>현재 상태</h2>
+      <h2>데이터 보관</h2>
       <p>
-        QADOC은 이전 사이드 프로젝트 <strong>QASS</strong>의 연장선에서 만들어진 <strong>내부 파일럿</strong>입니다.
-        데이터는 기본적으로 사용자 브라우저(localStorage)에 저장되며, 별도 서버 계정 없이 바로 사용할 수 있습니다.
+        작성 내용은 기본적으로 사용자 브라우저(localStorage)에 저장되며, 별도 서버 계정 없이 바로 사용할 수 있습니다.
+        팀 공용 저장이 필요한 경우 서버 저장소로 전환할 수 있도록 설계되어 있습니다.
       </p>
 
-      <p><a href="app.html">→ 앱 시작하기</a></p>
+      <p><a href="app.html">앱 시작하기</a></p>
     </div>
   </main>
 

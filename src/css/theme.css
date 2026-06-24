@@ -1,0 +1,122 @@
+/*
+ * QADOC 공유 디자인 토큰 — 라이트/다크 공용.
+ * 모든 페이지(랜딩·앱·정보)가 이 파일을 먼저 불러 색을 변수로 참조한다.
+ * 다크 모드는 <html data-theme="dark"> 로 전환된다 (theme.js).
+ */
+:root {
+  color-scheme: light;
+
+  /* 표면 / 텍스트 */
+  --bg: #f6f7fb;
+  --bg-alt: #eef1f8;
+  --surface: #ffffff;
+  --surface-2: #f3f5fb;
+  --panel: #ffffff;
+  --border: #e4e7f0;
+  --border-strong: #d4d9e6;
+  --text: #14161c;
+  --text-secondary: #5a6173;
+  --muted: #5a6173;
+  --text-muted: #5a6173;
+  --text-faint: #9099ab;
+
+  /* 강조 */
+  --primary: #4f6ef7;
+  --primary-dark: #3d5ce0;
+  --accent-2: #7b5cff;
+  --accent-subtle: #eef0fe;
+  --grad: linear-gradient(135deg, #4f6ef7 0%, #7b5cff 100%);
+
+  /* 의미 색 */
+  --review: #0c9b6f;
+  --review-subtle: #e6f7f0;
+  --error: #e03131;
+  --error-subtle: #fdecec;
+  --warning: #e08a00;
+  --warning-subtle: #fdf3e2;
+  --info: #4f6ef7;
+  --info-subtle: #eef0fe;
+
+  /* 형태 */
+  --radius: 14px;
+  --radius-sm: 9px;
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 10px 30px rgba(15, 23, 42, 0.10);
+  --shadow: 0 10px 30px -12px rgba(28, 39, 84, 0.18);
+  --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #0c0e14;
+  --bg-alt: #1b1f2a;
+  --surface: #14171f;
+  --surface-2: #1b1f2a;
+  --panel: #14171f;
+  --border: #262b38;
+  --border-strong: #323847;
+  --text: #eef1f8;
+  --text-secondary: #9aa3b8;
+  --muted: #9aa3b8;
+  --text-muted: #9aa3b8;
+  --text-faint: #6b7485;
+
+  --primary: #6e8bff;
+  --primary-dark: #8099ff;
+  --accent-2: #9b7bff;
+  --accent-subtle: #1a1e31;
+  --grad: linear-gradient(135deg, #6e8bff 0%, #9b7bff 100%);
+
+  --review: #2bd49b;
+  --review-subtle: #112a22;
+  --error: #ff6b6b;
+  --error-subtle: #2c1718;
+  --warning: #f6b352;
+  --warning-subtle: #2a2113;
+  --info: #6e8bff;
+  --info-subtle: #1a1e31;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 14px 40px -16px rgba(0, 0, 0, 0.6);
+  --shadow: 0 14px 40px -16px rgba(0, 0, 0, 0.6);
+}
+
+/* ── 테마 토글 버튼 (우측 상단, 참고 사이트와 동일 형태) ── */
+.theme-toggle {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color var(--transition), background-color var(--transition), transform 0.2s;
+}
+.theme-toggle:hover {
+  background-color: var(--accent-subtle);
+  border-color: var(--primary);
+  transform: rotate(20deg);
+}
+.theme-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* 아이콘 공통: 텍스트와 정렬되는 인라인 라인 아이콘 */
+.ic {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: -0.125em;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
