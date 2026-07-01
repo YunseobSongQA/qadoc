@@ -15,7 +15,7 @@
   function initial() {
     var saved = localStorage.getItem(KEY);
     if (saved === "dark" || saved === "light") return saved;
-    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
+    // 저장된 선택이 없으면 OS 설정과 무관하게 항상 라이트 모드로 진입한다.
     return "light";
   }
 

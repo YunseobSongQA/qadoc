@@ -1,7 +1,7 @@
 /*
  * Supabase 저장소 어댑터 (Phase 4b) — provider 교체형 저장소의 "원격" 구현.
  *
- * ⚠️ 현재 기본 저장소는 storage.js(localStorage, 동기)입니다. 파일럿 무가입 체험을 유지하기 위함.
+ * [주의] 현재 기본 저장소는 storage.js(localStorage, 동기)입니다. 파일럿 무가입 체험을 유지하기 위함.
  *    이 어댑터는 동일한 "논리적 인터페이스"를 async 로 제공합니다. 실제 전환(app.js의 storage
  *    호출을 await 로 바꾸는 작업)은 4b 단계에서 진행합니다. 지금은 설정 시 로드되는 참조 구현입니다.
  *

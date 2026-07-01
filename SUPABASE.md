@@ -36,7 +36,7 @@ function store() { return QADOC.storageSupabase || QADOC.storage; }
 - **config.js / supabase-js 가 없으면** → `storage-supabase.js`가 스스로 비활성화 → localStorage(`storage.js`) 사용 (무가입 체험 그대로)
 - **2단계의 스크립트 3줄을 index.html에 추가하면** → Supabase 사용 + 미로그인 시 **이메일 매직링크 로그인 화면**이 뜨고, 로그인하면 문서가 Supabase에 저장됩니다.
 
-> ⚠️ 라이브 검증 안내: 이 전환 코드는 실제 Supabase 프로젝트 키로만 끝까지 확인할 수 있습니다. localStorage 경로는 키 없이도 정상 동작하도록 보존되어 있습니다(`await`는 동기 값에도 안전).
+> [주의] 라이브 검증 안내: 이 전환 코드는 실제 Supabase 프로젝트 키로만 끝까지 확인할 수 있습니다. localStorage 경로는 키 없이도 정상 동작하도록 보존되어 있습니다(`await`는 동기 값에도 안전).
 
 ## 키 안전성
 
