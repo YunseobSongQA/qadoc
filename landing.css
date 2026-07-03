@@ -20,9 +20,10 @@ img { max-width: 100%; }
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(15, 23, 42, .88);
+  background: var(--header-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
 }
 
 .site-header-inner {
@@ -41,7 +42,7 @@ img { max-width: 100%; }
   gap: 8px;
   font-size: 22px;
   font-weight: 800;
-  background: linear-gradient(135deg, #60a5fa, #a78bfa);
+  background: var(--grad);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -68,7 +69,7 @@ img { max-width: 100%; }
 .site-nav::-webkit-scrollbar { display: none; }
 
 .site-nav a {
-  color: #94a3b8;
+  color: var(--text-muted);
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
@@ -81,8 +82,8 @@ img { max-width: 100%; }
 /* 마우스 올렸을 때 + 현재 보고 있는 페이지(active) 모두 같은 강조색 유지 */
 .site-nav a:hover,
 .site-nav a.active {
-  color: #60a5fa;
-  border-bottom-color: #60a5fa;
+  color: var(--primary);
+  border-bottom-color: var(--primary);
 }
 
 .site-nav a.active { font-weight: 600; }
@@ -591,15 +592,15 @@ img { max-width: 100%; }
   }
 }
 
-/* ── 헤더 테마 토글 (어두운 헤더 위) ──────────────────────────── */
+/* ── 헤더 테마 토글 (밝은 헤더 위, 테마 변수 사용) ──────────────── */
 .site-header .theme-toggle {
   width: 36px; height: 36px; flex-shrink: 0;
-  border: 1.5px solid rgba(148, 163, 184, 0.4);
-  color: #cbd5e1;
+  border: 1.5px solid var(--border);
+  color: var(--text-muted);
 }
 .site-header .theme-toggle:hover {
-  background-color: rgba(148, 163, 184, 0.15);
-  border-color: #60a5fa;
+  background-color: var(--accent-subtle);
+  border-color: var(--primary);
 }
 .site-header .theme-toggle svg { width: 17px; height: 17px; }
 

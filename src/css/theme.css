@@ -12,6 +12,7 @@
   --surface: #ffffff;
   --surface-2: #f3f5fb;
   --panel: #ffffff;
+  --header-bg: rgba(255, 255, 255, 0.85);
   --border: #e4e7f0;
   --border-strong: #d4d9e6;
   --text: #14161c;
@@ -54,6 +55,7 @@
   --surface: #14171f;
   --surface-2: #1b1f2a;
   --panel: #14171f;
+  --header-bg: rgba(12, 14, 20, 0.85);
   --border: #262b38;
   --border-strong: #323847;
   --text: #eef1f8;
